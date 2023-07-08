@@ -103,11 +103,37 @@ public class LecturaArchivos {
      * @param listaReservas
      */
     public void agregarReservas(LinkedList<Reservas> listaReservas) {
+        //lee el documento "reservas.txt"
+        LinkedList<Reservas> listaReservasLeidas = new LinkedList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("reservas.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // si la linea no tiene caracteres, se omite
+                if (line.trim().isEmpty()) { continue; }
+                String[] chain = line.split(",");
+                // limpia los espacios
+                for (int i = 0; i < chain.length; i++) { chain[i] = chain[i].trim(); }
+                String rutReservas = chain[0];
+                String nombreReservas = chain[1];
+                String apellidoReservas = chain[2];
+                String ISBNReservas = chain[3];
+                String nombreLibroReservas = chain[4];
+                String tipoTransaccion = chain[5];
+                // Instancia los usuarios al ejecutar la lectura
+                Reservas aux = new Reservas(rutReservas, nombreReservas, apellidoReservas, ISBNReservas, nombreLibroReservas, tipoTransaccion);
+                listaReservasLeidas.add(aux);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al leer el archivo: " + e.getMessage());
+        }
         // Escribe un documento "reservas.txt"
         try {
             BufferedWriter escritor = new BufferedWriter(new FileWriter("reservas.txt"));
 
             for (Reservas aux : listaReservas) {
+                listaReservasLeidas.add(aux);
+            }
+            for (Reservas aux : listaReservasLeidas) {
                 String linea = aux.getRutReservas() +
                         "," + aux.getNombreReservas() +
                         "," + aux.getApellidoReservas() +
