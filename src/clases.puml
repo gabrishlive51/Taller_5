@@ -1,0 +1,145 @@
+@startuml
+skin rose
+top to bottom direction
+class Libro {
+  - ISBN: String
+  - nombre: String
+  - autor: String
+  - categoria: String
+  - cantPaginas: int
+  - stock: int
+
+  + Libro(ISBN: String, nombre: String, autor: String, categoria: String, cantPaginas: int, stock: int)
+  + getISBN(): String
+  + getNombre(): String
+  + getAutor(): String
+  + getCategoria(): String
+  + getCantPaginas(): int
+  + getStock(): int
+  + setStock(stock: int): void
+}
+class Usuario {
+    - rut: String
+    - nombre: String
+    - apellido: String
+    - contrasena: String
+
+    + Usuario(rut: String, nombre: String, apellido: String, contrasena: String)
+    + getRut(): String
+    + getNombre(): String
+    + getApellido(): String
+    + getContrasena(): String
+}
+class Reservas {
+    - rutReservas: String
+    - nombreReservas: String
+    - apellidoReservas: String
+    - ISBNReservas: String
+    - nombreLibroReservas: String
+    - tipoTransaccion: String
+
+    + Reservas(rutReservas: String, nombreReservas: String, apellidoReservas: String, ISBNReservas: String, nombreLibroReservas: String, tipoTransaccion: String)
+    + getRutReservas(): String
+    + getNombreReservas(): String
+    + getApellidoReservas(): String
+    + getISBNReservas(): String
+    + getNombreLibroReservas(): String
+    + getTipoTransaccion(): String
+}
+class SistemaImpl{
+    + SistemaImpl(): void
+}
+interface Sistema {
+    + IniciarSesion(): void
+}
+class LecturaArchivos {
+    + leerArchivoLibros(arrayLibro: ArrayList<Libro>): ArrayList<Libro>
+    + leerArchivoUsuarios(listaNexoUsuario: LinkedList<Usuario>): LinkedList<Usuario>
+    + agregarLibro(libroAgregar: List<Libro>): void
+    + agregarReservas(listaReservas: LinkedList<Reservas>): void
+}
+class BuscarLibro {
+  - buscarButton: JButton
+  - campoISBN: JTextField
+  - desplegarLibro: JTextArea
+  - buscarLibro: JPanel
+  - volverButton: JButton
+
+  + BuscarLibro()
+  + BuscarLibro(ArrayList<Libro> listaLibro): void
+}
+class DevolverLibro {
+  - campoISBN: JTextField
+  - devolverButton: JButton
+  - volverButton: JButton
+  - devolverLibro: JPanel
+
+  + DevolverLibro(rutActivo: String, nombreActivo: String, apellidoActivo: String, listaReservas: LinkedList<Reservas>)
+  + DevolverLibro(listaLibro: ArrayList<Libro>, rutActivo: String, nombreActivo: String, apellidoActivo: String, listaReservas: LinkedList<Reservas>): void
+}
+class IniciarSesion {
+  - campoRutTextField: JTextField
+  - contrasenaPasswordField: JPasswordField
+  - iniciarSesionButton: JButton
+  - iniciarSesion: JPanel
+  - cerrarButton: JButton
+
+  + IniciarSesion(listaReservas: LinkedList<Reservas>)
+  + Ingresar(LinkedList<Usuario>): void
+  + EscrituraRegistro(listaReservas: LinkedList<Reservas>): void
+  + Limpiar(): void
+}
+class MenuGUI {
+  - buscarLibroButton: JButton
+  - devolverLibroButton: JButton
+  - prestarLibroButton: JButton
+  - agregarNuevoLibroButton: JButton
+  - menuBiblioteca: JPanel
+  - cerrarSesionButton: JButton
+
+  + MenuGUI(rutActivo: String, nombreActivo: String, apellidoActivo: String, listaReservas: LinkedList<Reservas>): void
+}
+class PrestarLibro {
+  - campoISBN: JTextField
+  - pedirButton: JButton
+  - prestarLibro: JPanel
+  - volverButton: JButton
+
+  + PrestarLibro(rutActivo: String, nombreActivo: String, apellidoActivo: String, listaReservas: LinkedList<Reservas>)
+  + buscarLibro(listaLibro: ArrayList<Libro>, rutActivo: String, nombreActivo: String, apellidoActivo: String, listaReservas: LinkedList<Reservas>): void
+  + Limpiar(): void
+}
+class AgregarLibro {
+  - campoISBN: JTextField
+  - campoTitulo: JTextField
+  - campoAutor: JTextField
+  - campoCategoria: JTextField
+  - campoPaginas: JTextField
+  - campoStock: JTextField
+  - agregarButton: JButton
+  - volverButton: JButton
+  - agregarLibro: JPanel
+
+  + AgregarLibro()
+  + AgregarLibro(ArrayList<Libro> listaLibro): void
+}
+
+
+Sistema "1" <|.. "1" SistemaImpl: implementa
+Sistema "1" --> "1" IniciarSesion: accede
+IniciarSesion "1" --> "1" MenuGUI: abre
+MenuGUI "1" --> "1" BuscarLibro: abre
+MenuGUI "1" --> "1" PrestarLibro: abre
+MenuGUI "1" --> "1" AgregarLibro: abre
+MenuGUI "1" --> "1" DevolverLibro: abre
+DevolverLibro "1" --> "1" Reservas: crea
+PrestarLibro "1" --> "1" Reservas: crea
+Reservas "1" --> "1" IniciarSesion: -listaReservas
+LecturaArchivos <--- IniciarSesion: lee
+LecturaArchivos <--- BuscarLibro: lee
+LecturaArchivos <--- PrestarLibro: lee
+LecturaArchivos <--- AgregarLibro: lee y modifica
+LecturaArchivos --> Usuario: instancia
+LecturaArchivos --> Libro: instancia
+
+@enduml

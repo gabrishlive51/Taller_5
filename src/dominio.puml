@@ -1,0 +1,35 @@
+@startuml
+skin rose
+left to right direction
+entity Sistema {
+  Trabajador
+  Libro
+}
+
+entity Trabajador {
+  Rut
+  Nombre
+  Apellido
+  Contraseña
+}
+
+entity Libro {
+  ISBN
+  Titulo
+  Autor
+  Categoria
+  Paginas
+  Stock
+}
+entity Reserva {
+  Rut Vendedor
+  Nombre
+  Apellido
+  ISBN Libro
+  Transaccion
+}
+
+Sistema “1” -- “1…” Trabajador: < utiliza
+Sistema “1”-- “1…” Libro: > administra
+Sistema “1” .. “1…” Reserva: > crea
+@enduml
